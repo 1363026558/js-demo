@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    .dialog {
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(102,102,102,0.5);
+      position: fixed;
+      text-align: center;
+      position: fixed;
+      z-index: 9999;
+      display: block;
+    }
+    .cover {
+      /* width: 100%;
+      height: 100%; */
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(102,102,102,0.5);
+      position: fixed;
+      z-index: 999;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <button onclick="show()">点击</button>
+  <div class="dialog">
+    <p id="text">test</p>
+  </div>
+  <!-- <div class="cover"></div> -->
+
+  <script>
+    let dialog = document.getElementsByClassName('dialog')[0];
+    let p = document.getElementById('text');
+    // let cover = document.getElementsByClassName('cover')[0];
+    // document.addEventListener('click', function() {
+      
+    //   dialog.style.display = 'none';
+    //   // cover.style.display = 'block';
+    // })
+    dialog.addEventListener('click', function(e) {
+      dialog.style.display = 'none';
+    });
+    p.addEventListener('click', function(e) {
+      e.stopPropagation();
+    })
+    
+    // cover.addEventListener('click', function(e) {
+    //   console.log(e);
+    //   e.stopPropagation
+    //   dialog.style.display = 'none';
+    //   cover.style.display = 'none';
+    // })
+  </script>
+</body>
+</html>

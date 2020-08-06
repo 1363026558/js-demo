@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <button onclick="setCookie('wym', '123456')">设置cookie</button>
+  <button onclick="getCookie('wym')">获取cookie</button>
+  <button onclick="removeCookie()">清除cookie</button>
+  <p class="text"></p>
+
+  <script>
+    function setCookie (name, value) {
+      let exp = new Date();
+      console.log(exp.getTime()); // getTime()获得时间戳
+      console.log(exp.setTime(exp.getTime() + 60000));
+      console.log(exp.toGMTString());
+      document.cookie = name + "=" + escape(value) + ";expires=" + exp.toGMTString();
+      
+      // let data = ('' + exp + '').match(/2020.*?G/g)
+      // console.log(data);
+      // exp.setTime(exp.getTime() + time*1000);
+      exp.setTime(exp.getTime() + '');
+    }
+    function getCookie (name) {
+      var arr = document.cookie.match(new RegExp("(^| )" + name + "=([^;]*)(;|$)"));
+				if (arr != null) console.log(unescape(arr[2]));
+      // console.log(document.cookie);
+      // let arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
+      // if(arr=document.cookie.match(reg))
+      // console.log(unescape(arr[2]));
+      // else
+      //   return null;
+    }
+  </script>
+</body>
+</html>

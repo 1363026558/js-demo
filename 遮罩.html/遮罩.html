@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>遮罩</title>
+  <style>
+    .wym {
+      width: 100px;
+      height: 100px;
+      background-color: #000;
+    }
+  </style>
+</head>
+
+<div class="wym"></div>
+
+<script>
+  let name1 = document.querySelector('.wym');
+  name1.onclick = function () {
+    alert('点击了wym');
+  }
+  function addCover(name) {
+    let name2 = document.querySelector(name);
+    let oDiv = document.createElement('div');
+    oDiv.setAttribute('style', 'pointer-events: none')
+    // let w = document.getElementsByClassName('www');
+    // w.onclick = function (e) {
+    //   console.log(212);
+      
+    //   e.preventDefault;
+    //   return false;
+    // }
+    var ev = document.createEvent('HTMLEvents'); 
+ev.clientX = 625
+ev.clientY = 356
+ev.initEvent('click', false, true);
+document.querySelector('p').dispatchEvent(ev);
+$(".post")[0].dispatchEvent(ev)
+    name2.parentNode.replaceChild(oDiv, name2);
+    oDiv.appendChild(name2);
+  }
+</script>
+</html>

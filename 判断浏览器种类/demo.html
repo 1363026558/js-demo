@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+  </style>
+</head>
+<body>
+  
+  <script>
+    let a = myBrowser();
+    console.log('当前浏览器是：', a);
+    
+    // 判断浏览器类型 
+function myBrowser () {
+  let userAgent = navigator.userAgent; // 取得浏览器的userAgent字符串
+  if (userAgent.indexOf('OPR') > -1) {
+    return 'Opera';
+  } // 判断是否Opera浏览器 OPR/43.0.2442.991
+  if (userAgent.indexOf('Firefox') > -1) {
+    return 'FF';
+  } // 判断是否Firefox浏览器 Firefox/51.0
+  if (userAgent.indexOf('Trident') > -1) {
+    return 'IE';
+  } // 判断是否IE浏览器  Trident/7.0; rv:11.0
+  if (userAgent.indexOf('Edge') > -1) {
+    return 'Edge';
+  } // 判断是否Edge浏览器  Edge/14.14393
+  if (userAgent.indexOf('Chrome') > -1) {
+    return 'Chrome';
+  } // Chrome/56.0.2924.87
+  if (userAgent.indexOf('Safari') > -1) {
+    return 'Safari';
+  } // 判断是否Safari浏览器 AppleWebKit/534.57.2 Version/5.1.7 Safari/534.57.2
+}
+  </script>
+</body>
+</html>

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>blob下载</title>
+</head>
+<body>
+  <button onclick="download()">下载</button>
+  <script>
+    function download () {
+      let blob = new Blob(["hello wym!!"]);
+      let url = window.URL.createObjectURL(blob);
+      let a = document.createElement('a');
+      a.download = 'wym.txt';
+      a.href = url;
+      a.click();
+    }
+  </script>
+</body>
+</html>

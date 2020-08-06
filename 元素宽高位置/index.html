@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+      * {
+        padding: 0;
+        margin: 0;
+      }
+      .father {
+        width: 500px;
+        height: 500px;
+        background-color: yellow;
+        overflow: auto;
+      }
+      .son {
+        margin-top: 20px;
+          width: 400px;
+          height: 700px;
+          background-color: red;
+          border: 5px solid blue;
+          padding: 20px;
+          /* box-sizing: border-box;会影响 */
+      }
+      .son1 {
+          width: 50px;
+          height: 50px;
+          background-color: red;
+          border: 5px solid blue;
+          /* box-sizing: border-box;会影响 */
+      }
+    </style>
+</head>
+<body>
+  <div class="father">
+    <div class="son1"></div>
+    <div class="son"></div>
+  </div>
+
+    <script>
+        let oDiv = document.querySelector('.son');
+        let width = oDiv.clientWidth; 
+        let height = oDiv.clientHeight;
+        console.log('client宽高:', width + '--------------' + height);
+        console.log('clienttop-left', oDiv.clientTop, oDiv.clientLeft);
+        /*
+            clientWidth是元素的宽度 + padding的左右宽度,不包括边框。
+            clientHeight是元素高度 + padding的上下宽度，不包括边框宽度
+            oDiv.clientTop: 上边框宽度
+            oDiv.clientLeft: 左边框宽度
+        */
+        let fullWidth = oDiv.offsetWidth;
+        let fullHeight = oDiv.offsetHeight;
+        console.log('offset:', fullWidth + '-------------------' + fullHeight);
+        console.log('offsettop:', oDiv.offsetTop + '-------------------' + oDiv.offsetLeft);
+        console.log('offsetTopHeight');
+        /*
+            offsetWidth是元素的宽度+ padding的左右宽度 + 边框的左右宽度
+            offsetHeight是元素的高度 + padding的上下宽度 + 边框的上下宽度
+            offsetTop是元素外边框距离父元素的上边框内边缘的距离，如果父级没定位，就是距离顶部body的距离
+        */
+        console.log('宽度' + oDiv.scrollWidth, '高度', + oDiv.scrollHeight);
+        /*
+          scrollWidth:获取指定标签内容层的真实宽度（可视区域宽度+被隐藏区域宽度）。
+          scrollHeight:获取指定标签内容层的真实高度（可视区域高度+被隐藏区域高度）。
+        */
+        
+    </script>
+</body>
+</html>

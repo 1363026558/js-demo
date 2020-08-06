@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			div#map{
+				width: 200px;
+				height: 200px;
+				border: 1px black solid;
+				margin: 50px auto;
+				position: relative;
+
+			}
+			div#top{
+				height: 50px;
+				width: 205px;
+				margin: 0px auto;
+				/*border: 1px black solid;*/
+			}
+			button{
+				font-size: 30px;
+				width: 100px;
+				
+			}
+			div#info{
+				font-size: 40px;
+				color: pink;
+				font-family: "楷体";
+				text-align: center;
+			}
+			div#size{
+				margin: 0px auto;
+				text-align: center;
+			}
+			input{
+				width: 50px;
+				
+			}
+		</style>
+	</head>
+	<body>
+		<div id="info">Q暂停，E开始，你想鼠标点按钮随便你</div>
+		<div id="top">
+			<button id="start">开始</button>
+			<button id="pause">暂停</button>
+		</div>
+		<div id="size">
+			游戏界面宽：<input id="width" type="number" value="20"/><br />
+			游戏界面高：<input id="height" type="number" value="20"/><br />
+			<font color="red">（建议最小20X20）</font>
+		</div>
+		<div id="map"></div>
+	</body>
+	<script>
+		//一、画布对象
+		function Map(width,height){
+			//画布属性
+			
+			this.canva = document.getElementById("map");
+			this.cellLength = 20;
+			this.width = width;
+			this.height = height;
+			//画布方法
+			//1.生成画布
+			this.getMap = function (judge){
+				//边框
+				this.canva.style.width = this.width*this.cellLength+"px";
+				this.canva.style.height = this.height*this.cellLength+"px";
+				//给格子
+				if(judge == true){
+					for(var i=0 ; i<this.height ; i++){
+						for(var j=0 ; j<this.width ; j++){
+							var s = document.createElement("div");
+							s.style.width = this.cellLength+"px";
+							s.style.height = this.cellLength+"px";
+							s.style.backgroundColor = "green";
+							s.style.border = "1px black solid";
+							s.style.position = "absolute";
+							s.style.left = j*this.cellLength+"px";
+							s.style.top = i*this.cellLength+"px";
+							this.canva.appendChild(s);
+						}
+					}
+				}
+			}
+			//2.修改长宽
+			this.setSize = function(nwidth,nheight){
+				this.width = nwidth;
+				this.height = nheight;
+				this.canva.style.width = this.width*this.cellLength+"px";
+				this.canva.style.height = this.height*this.cellLength+"px";
+			}
+			//2.
+			
+		}
+		//二、食物对象
+		function Food(map){
+			//属性
+			this.cellLength = map.cellLength;
+			this.x = Math.floor(Math.random()*map.width);
+			this.y = Math.floor(Math.random()*map.height);
+			this.color = "rgb("+Math.round(Math.random()*255)+","+Math.round(Math.random()*255)+","+Math.round(Math.random()*255)+")";
+			this.flag;
+			//创建食物方法
+			this.getFood = function(){
+				var s = document.createElement("div");
+				this.flag = s;
+				s.className = "food";
+				s.style.width = this.cellLength+"px";
+				s.style.height = this.cellLength+"px";
+				s.style.backgroundColor = this.color;
+				s.style.position = "absolute";
+				s.style.left = this.x*this.cellLength+"px";
+				s.style.top = this.y*this.cellLength+"px";
+				map.canva.appendChild(s);
+			}
+		}
+		//三、蛇对象
+		function Snack(map){
+			//蛇属性
+			this.body = [{x:2,y:0},{x:1,y:0},{x:0,y:0}];
+			this.cellLength = map.cellLength;
+			this.point = "right";
+			//蛇放到画布上
+			this.getBody = function(){
+				for(var i=0 ; i<this.body.length ; i++){
+					var s = document.createElement("div");
+					this.body[i].flag = s;
+					s.style.width = this.cellLength+"px";
+					s.style.height = this.cellLength+"px";
+					s.style.backgroundColor = "rgb("+Math.round(Math.random()*255)+","+Math.round(Math.random()*255)+","+Math.round(Math.random()*255)+")";
+					s.style.position = "absolute";
+					s.style.left = this.body[i].x*this.cellLength+"px";
+					s.style.top = this.body[i].y*this.cellLength+"px";
+					//第一个为圆头
+					if(i == 0){
+						s.style.borderRadius = "50%";
+					}
+					map.canva.appendChild(s);
+				}
+			}
+			
+			//蛇吃到食物增加身体
+			this.getFood = function(food){
+				//判断是否吃到
+				if(((this.body[0].x == food.x)&&(this.body[0].y == food.y))==false){
+					return -1;
+				}
+				//得到新身体的参数
+				var newx = this.body[this.body.length-1].x; 
+				var newy = this.body[this.body.length-1].y; 
+				//身体末尾增加一个
+				this.body[this.body.length] = {x:newx,y:newy};
+				//创造新的身体并放到画布上
+				var s = document.createElement("div");
+				this.body[this.body.length-1].flag = s;
+				s.style.width = this.cellLength+"px";
+				s.style.height = this.cellLength+"px";
+				s.style.backgroundColor = "rgb("+Math.round(Math.random()*255)+","+Math.round(Math.random()*255)+","+Math.round(Math.random()*255)+")";
+				s.style.position = "absolute";
+				s.style.left = newx*this.cellLength+"px";
+				s.style.top = newy*this.cellLength+"px";
+				map.canva.appendChild(s);
+				//返回结果
+				return 1;
+			}
+			
+			//蛇自己动起来
+			this.run = function(){
+//				//1.剩下部位动
+//				for(var i=this.body.length-1 ; i>0 ; i--){
+//					this.body[i].x = this.body[i-1].x;
+//				}
+
+				//2.剩下部位动
+				for(var i=this.body.length-1 ; i>0 ; i--){
+					if(i>0){
+						this.body[i].x = this.body[i-1].x;
+						this.body[i].y = this.body[i-1].y;
+					}
+					this.body[i].flag.style.left = this.body[i].x*this.cellLength+"px";
+					this.body[i].flag.style.top = this.body[i].y*this.cellLength+"px";
+				}
+				//方向
+				if(this.point=="right"){
+					this.body[0].x++;
+				}
+				if(this.point=="left"){
+					this.body[0].x--;
+				}
+				if(this.point=="top"){
+					this.body[0].y--;
+				}
+				if(this.point=="down"){
+					this.body[0].y++;
+				}
+				//1.删
+//				for(var i=0 ; i<this.body.length ; i++){
+//					map.canva.removeChild(this.body[i].flag);
+//				}
+//				this.getBody();
+				//2.改头值
+				this.body[0].flag.style.left = this.body[0].x*this.cellLength+"px";
+				this.body[0].flag.style.top = this.body[0].y*this.cellLength+"px";
+			}
+			//蛇改变方向
+//			this.onkeydown = function(e){
+//	//				alert(e.which);
+//					//左
+//					if((e.which==37||e.which==65)&&this.point!="right"){
+//						this.point = "left";
+//					}
+//					//右
+//					if((e.which == 39||e.which==68)&&this.point!="left"){
+//						this.point = "right";
+//					}
+//					//上						
+//					if((e.which == 38||e.which == 87)&&this.point!="top"){
+//						this.point = "top";
+//					}
+//					//下
+//					if((e.which == 40||e.which==83)&&this.point!="down"){
+//						this.point = "down";
+//					}
+////					alert(this.point);
+//			}s
+			//蛇撞到自己或者撞到墙
+			this.isDie = function(score){
+				if(this.body[0].x==map.width||this.body[0].x==-1||this.body[0].y==map.height||this.body[0].y==-1){
+					if(confirm("差一筹，本次共得到"+score+"分，是否开始新的一局？")){
+						window.location.reload();
+					}else{
+						for(;;){
+							if(confirm("取消没有用，老老实实点确定吧...")){
+								break;
+							}
+						}
+							window.location.reload();
+					}
+				}
+				//判断撞到自己身体
+				for(var i=4 ; i<this.body.length ; i++){
+					if((this.body[0].x==this.body[i].x)&&(this.body[0].y==this.body[i].y)){
+						if(confirm("你咋这么笨，还能撞到自己-_-,本次共得到"+score+"分，是否开始新的一局？")){
+							window.location.reload();
+						}else{
+							for(;;){
+								if(confirm("取消没有用，老老实实点确定吧...")){
+									break;
+								}
+							}
+							window.location.reload();
+						}
+					}
+				}
+				//方法结束
+			}
+			//没了
+		}
+		
+		//询问级别
+		function getLevel(){
+			var level = prompt("请输入你要挑战的级别(1-10:易-难),11级稍微难,12地狱级");
+			if(isNaN(level)){
+				return 500;
+			}
+			if(level==11){
+				return 50
+			}
+			if(level==12){
+				return 1
+			}
+			for(var i=1,j=1000 ; i<=10 ; i++){
+				if(level == i){
+					level = j;
+					break;
+				}
+				j-=100;
+			}
+			return level;
+		}
+		
+		//准备工作
+		//1.生成地图对象
+		//获取长宽
+		var nwidth = document.getElementById("width");
+		var nheigt = document.getElementById("height");
+		var width = 20;
+		var height = 20;
+		var map = new Map(width,height);
+		//在界面生成地图，并告知是否显示格子
+		map.getMap(false);
+		nwidth.onblur = function(){
+			map.setSize(nwidth.value,nheigt.value);
+		}
+		nheigt.onblur = function(){
+			map.setSize(nwidth.value,nheigt.value);
+		}
+		
+		//2.创造食物
+		var food = new Food(map);
+		//食物放到地图上
+		food.getFood();
+		//3.创造蛇
+		var snack = new Snack(map);
+		//蛇放到地图上
+		snack.getBody();
+		//开始游戏
+		var start = document.getElementById("start");
+		var level = 1;
+		level = getLevel();
+		var interval;
+		var score=0;
+		start.onclick = function(){
+			if(interval == null){
+//				snack.point = snack.changePoint();
+				interval = setInterval(function(){
+					//蛇动
+					snack.run();
+					snack.onkeydown;
+					//蛇撞到自己或者墙
+					snack.isDie(score);
+					//食物被吃蛇和食物变化
+					var result = snack.getFood(food);
+					if(result==1){
+						score++;
+						//删除旧食物
+						map.canva.removeChild(food.flag);
+						//创造新食物
+						food = new Food(map);
+						//新食物放到地图上
+						food.getFood();
+					}
+				},level);
+			}
+		}
+		//改变蛇方向
+		onkeydown = function(e){
+//			alert(e.which)
+			//q暂停
+			if(e.which==81){
+				clearInterval(interval);
+				interval = null;
+				return
+			}
+			//e继续
+			if(e.which==69){
+				if(interval == null){
+	//				snack.point = snack.changePoint();
+					interval = setInterval(function(){
+						//蛇动
+						snack.run();
+						snack.onkeydown;
+						//蛇撞到自己或者墙
+						snack.isDie(score);
+						//食物被吃蛇和食物变化
+						var result = snack.getFood(food);
+						if(result==1){
+							score++;
+							//删除旧食物
+							map.canva.removeChild(food.flag);
+							//创造新食物
+							food = new Food(map);
+							//新食物放到地图上
+							food.getFood();
+						}
+					},level);
+				}
+			}
+			//左
+			if((e.which==37||e.which==65)&&snack.point!="right"){
+				snack.point = "left";
+				return
+			}
+			//右
+			if((e.which == 39||e.which==68)&&snack.point!="left"){
+				snack.point = "right";
+				return
+			}
+			//上						
+			if((e.which == 38||e.which == 87)&&snack.point!="down"){
+				snack.point = "top";
+				return
+			}
+			//下
+			if((e.which == 40||e.which==83)&&snack.point!="top"){
+				snack.point = "down";
+				return
+			}
+//					
+		}
+		//按钮暂停游戏
+		var pause = document.getElementById("pause");
+		pause.onclick = function(){
+			clearInterval(interval);
+			interval = null;
+		}
+	</script>
+</html>
+

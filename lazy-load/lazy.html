@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div style="width: 100px;height: 1000px;border: 1px solid #000;"></div>
+  <img src="" alt="alt显示" title="title显示" class="lazy">
+  <script>
+    window.onscroll = function () {
+      let vheight = document.documentElement.clientHeight;
+      let oImg = document.getElementsByClassName('lazy')[0];
+      console.log(oImg.offsetTop);
+
+      if (oImg.offsetTop > vheight) {
+        oImg.setAttribute("src", "http://www.ymxya.xyz/assets/img/banner/fl01.png");
+      }
+    }
+  </script>
+</body>
+</html>
