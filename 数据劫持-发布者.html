@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <input type="text" id='val' oninput="change(this.value)">
+  <p id='val2'></p>
+
+  <script>
+    let data = {};
+    let input = document.querySelector('#val');
+    let p = document.querySelector('#val2');
+    function change(value) {
+      data.a = value;
+    };
+    Object.defineProperty(data, 'a', {
+      set(newVal) {
+        p.innerHTML = newVal;
+      },
+      get() {
+        return a;
+      }
+    })
+  </script>
+</body>
+</html>
